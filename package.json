@@ -11,7 +11,7 @@
     "crypto": "^1.0.1",
     "emoji.json": "^15.1.0"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "emojiseedjs",
   "description": "Generate random emoji seeds",
   "scripts": {
