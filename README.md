@@ -1,4 +1,4 @@
-![NPM Version](https://img.shields.io/npm/v/emojiseed) ![NPM Downloads](https://img.shields.io/npm/dw/emojiseed)
+![NPM Version](https://img.shields.io/npm/v/emojiseedjs) ![NPM Downloads](https://img.shields.io/npm/dw/emojiseedjs)
 # EmojiSeed
 Generate random emoji sequences and seeds.
 
