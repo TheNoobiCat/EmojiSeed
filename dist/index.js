@@ -58,8 +58,8 @@ function entropyToMnemonic(entropy) {
   const checksumBits = crypto2.createHash("sha256").update(entropy).digest().toString("hex").slice(0, entropy.length / 4).split("").map((hex) => parseInt(hex, 16).toString(2).padStart(4, "0")).join("");
   const bits = entropyBits + checksumBits;
   const mnemonic = [];
-  for (let i = 0; i < bits.length; i += 11) {
-    const idx = parseInt(bits.slice(i, i + 11), 2);
+  for (let i = 0; i < bits.length; i += 13) {
+    const idx = parseInt(bits.slice(i, i + 13), 2);
     mnemonic.push(EMOJI_LIST[idx % EMOJI_LIST.length]);
   }
   return mnemonic.join(" ");

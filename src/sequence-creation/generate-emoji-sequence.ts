@@ -24,8 +24,8 @@ function entropyToMnemonic(entropy: Buffer): string {
   const bits = entropyBits + checksumBits;
   const mnemonic: string[] = [];
 
-  for (let i = 0; i < bits.length; i += 11) {
-    const idx = parseInt(bits.slice(i, i + 11), 2);
+  for (let i = 0; i < bits.length; i += 13) {
+    const idx = parseInt(bits.slice(i, i + 13), 2);
     mnemonic.push(EMOJI_LIST[idx % EMOJI_LIST.length]); 
   }
   return mnemonic.join(" ");
