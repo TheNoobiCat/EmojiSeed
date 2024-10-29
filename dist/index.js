@@ -40,9 +40,9 @@ var crypto = __toESM(require("crypto"));
 function normalize(str) {
   return (str || "").normalize("NFKD");
 }
-function emojiSequenceToSeed(mnemonic) {
+function emojiSequenceToSeed(mnemonic, salt = "") {
   const mnemonicBuffer = Uint8Array.from(Buffer.from(normalize(mnemonic), "utf8"));
-  const salt = "emojiseed";
+  const Salt = "emojiseed" + salt;
   return crypto.pbkdf2Sync(mnemonicBuffer, salt, 2048, 64, "sha512").toString("hex");
 }
 
