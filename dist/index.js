@@ -38,11 +38,11 @@ module.exports = __toCommonJS(src_exports);
 // src/seed-generation/generate-seed.ts
 var crypto = __toESM(require("crypto"));
 function normalize(str) {
-  return (str || "").normalize("NFKD");
+  return (str || "").normalize("NFC");
 }
 function emojiSequenceToSeed(mnemonic, salt = "") {
   const mnemonicBuffer = Uint8Array.from(Buffer.from(normalize(mnemonic), "utf8"));
-  const Salt = "emojiseed" + salt;
+  const Salt = crypto.createHash("sha256").update("emojiseed" + salt).digest("hex");
   return crypto.pbkdf2Sync(mnemonicBuffer, Salt, 2048, 64, "sha512").toString("hex");
 }
 
