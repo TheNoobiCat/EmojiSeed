@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
 
 function normalize(str:string) : string {
-    return (str || '').normalize('NFKD');
+    return (str || '').normalize('NFC');
 }
 
 /**
