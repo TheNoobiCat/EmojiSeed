@@ -12,7 +12,7 @@ function normalize(str:string) : string {
  * @returns {string} - The generated seed as a hexadecimal string.
  */
 export default function emojiSequenceToSeed(mnemonic: string, salt=""): string {
-    const mnemonicBuffer = Uint8Array.from(Buffer.from(normalize(mnemonic), 'utf8'));
-    const Salt = "emojiseed"+salt;
-    return crypto.pbkdf2Sync(mnemonicBuffer, salt, 2048, 64, "sha512").toString("hex");
+    const mnemonicBuffer:Uint8Array = Uint8Array.from(Buffer.from(normalize(mnemonic), 'utf8'));
+    const Salt:string = "emojiseed"+salt;
+    return crypto.pbkdf2Sync(mnemonicBuffer, Salt, 2048, 64, "sha512").toString("hex");
 }
