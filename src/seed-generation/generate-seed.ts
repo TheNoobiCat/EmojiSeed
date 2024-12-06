@@ -15,5 +15,5 @@ export default function emojiSequenceToSeed(mnemonic: string, salt=""): string {
     const mnemonicBuffer:Uint8Array = Uint8Array.from(Buffer.from(normalize(mnemonic), 'utf8'));
     const Salt = crypto.createHash('sha256').update("emojiseed" + salt).digest('hex');
 
-    return crypto.pbkdf2Sync(mnemonicBuffer, Salt, 2048, 64, "sha512").toString("hex");
+    return crypto.pbkdf2Sync(mnemonicBuffer, Salt, 210000, 64, "sha512").toString("hex");
 }

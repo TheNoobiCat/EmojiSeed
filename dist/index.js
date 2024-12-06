@@ -43,7 +43,7 @@ function normalize(str) {
 function emojiSequenceToSeed(mnemonic, salt = "") {
   const mnemonicBuffer = Uint8Array.from(Buffer.from(normalize(mnemonic), "utf8"));
   const Salt = crypto.createHash("sha256").update("emojiseed" + salt).digest("hex");
-  return crypto.pbkdf2Sync(mnemonicBuffer, Salt, 2048, 64, "sha512").toString("hex");
+  return crypto.pbkdf2Sync(mnemonicBuffer, Salt, 21e4, 64, "sha512").toString("hex");
 }
 
 // src/sequence-creation/generate-emoji-sequence.ts
