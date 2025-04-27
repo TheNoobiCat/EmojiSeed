@@ -1,19 +1,30 @@
 import * as crypto from "crypto";
+import * as argon2 from "argon2";
 
-function normalize(str:string) : string {
+function normalize(str: string): string {
     return (str || '').normalize('NFC');
 }
 
 /**
- * Converts an emoji sequence mnemonic into a seed string using PBKDF2 with HMAC-SHA512.
+ * Converts an emoji sequence mnemonic into a seed string using Argon2.
  *
  * @param {string} mnemonic - The string consisting of emojis.
- * @param {string} salt - The salt to use for the PBKDF2 function.
- * @returns {string} - The generated seed as a hexadecimal string.
+ * @param {string} salt - The salt to use for the Argon2 function.
+ * @returns {Promise<string>} - The generated seed as a hexadecimal string.
  */
-export default function emojiSequenceToSeed(mnemonic: string, salt=""): string {
-    const mnemonicBuffer:Uint8Array = Uint8Array.from(Buffer.from(normalize(mnemonic), 'utf8'));
-    const Salt = crypto.createHash('sha256').update("emojiseed" + salt).digest('hex');
+export default async function emojiSequenceToSeed(mnemonic: string, salt = ""): Promise<string> {
+    const mnemonicBuffer: Buffer = Buffer.from(normalize(mnemonic), 'utf8');
+    const saltBuffer: Buffer = crypto.createHash('sha256').update("emojiseed" + salt).digest();
 
-    return crypto.pbkdf2Sync(mnemonicBuffer, Salt, 210000, 64, "sha512").toString("hex");
+    const hash = await argon2.hash(mnemonicBuffer, {
+        type: argon2.argon2id,
+        salt: saltBuffer,
+        hashLength: 64,
+        timeCost: 3, // Number of iterations
+        memoryCost: 2 ** 16, // Memory usage in KiB (e.g., 64 MiB)
+        parallelism: 1, // Number of threads
+        raw: true,
+    });
+
+    return hash.toString("hex");
 }

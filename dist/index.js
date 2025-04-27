@@ -26,24 +26,59 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 
 // src/index.ts
-var src_exports = {};
-__export(src_exports, {
+var index_exports = {};
+__export(index_exports, {
   emojiSequenceToSeed: () => emojiSequenceToSeed,
   generateSequence: () => generateSequence
 });
-module.exports = __toCommonJS(src_exports);
+module.exports = __toCommonJS(index_exports);
 
 // src/seed-generation/generate-seed.ts
 var crypto = __toESM(require("crypto"));
+var argon2 = __toESM(require("argon2"));
 function normalize(str) {
   return (str || "").normalize("NFC");
 }
 function emojiSequenceToSeed(mnemonic, salt = "") {
-  const mnemonicBuffer = Uint8Array.from(Buffer.from(normalize(mnemonic), "utf8"));
-  const Salt = crypto.createHash("sha256").update("emojiseed" + salt).digest("hex");
-  return crypto.pbkdf2Sync(mnemonicBuffer, Salt, 21e4, 64, "sha512").toString("hex");
+  return __async(this, null, function* () {
+    const mnemonicBuffer = Buffer.from(normalize(mnemonic), "utf8");
+    const saltBuffer = crypto.createHash("sha256").update("emojiseed" + salt).digest();
+    const hash2 = yield argon2.hash(mnemonicBuffer, {
+      type: argon2.argon2id,
+      salt: saltBuffer,
+      hashLength: 64,
+      timeCost: 3,
+      // Number of iterations
+      memoryCost: 2 ** 16,
+      // Memory usage in KiB (e.g., 64 MiB)
+      parallelism: 1,
+      // Number of threads
+      raw: true
+    });
+    return hash2.toString("hex");
+  });
 }
 
 // src/sequence-creation/generate-emoji-sequence.ts
